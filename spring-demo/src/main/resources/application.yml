@@ -1,18 +1,24 @@
 #web
 server.port: 10000
 #db
-jdbc:
-  driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://127.0.0.1:3306/spring_boot?useUnicode=true&amp;charaterEncoding=utf-8
-  username: root
-  password: 123456
-  maxActive: 3
-  maxIdle: 30
-  minIdle: 5
-  maxWait: 3000
-  validationQuery: /* ping */ select 1
-  testOnBorrow: false
-  testOnReturn: false
-  testWhileIdle: true
-  timeBetweenEvictionRunsMillis: 60000
-  minEvictableIdleTimeMillis: -1
+spring:
+    datasource:
+        name: test
+        url: jdbc:mysql://127.0.0.1:3306/spring_boot
+        username: root
+        password: 123456
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        filters: stat
+        maxActive: 20
+        initialSize: 1
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20

@@ -8,7 +8,7 @@
 	</resultMap>
 	
 	<select id="findById" resultMap="resultMap">
-		select id, name from demo where id = #{id}
+		select id, name from demo where id = #{id} 
 	</select>
 	
 	<insert id="insert">
