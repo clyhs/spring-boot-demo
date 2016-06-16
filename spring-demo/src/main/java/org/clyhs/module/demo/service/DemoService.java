@@ -33,12 +33,12 @@ public class DemoService {
     }
     
     
-    @CacheEvict(value="demoCache" )
-    public void create(){
+    @CacheEvict(value="demoCache" ,allEntries = true)
+    public void delete(){
     	
     }
     
-    @Cacheable(value = "demoCache" ,keyGenerator  = "baseKeyGenerator")
+    @Cacheable(value = "demoCache" )
     public List<Demo> getalldemo(){
     	System.out.println("无缓存的时候调用这里");
     	List<Demo> demos = new ArrayList<Demo>();

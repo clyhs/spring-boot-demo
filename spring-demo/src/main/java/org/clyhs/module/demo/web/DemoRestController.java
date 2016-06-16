@@ -58,7 +58,7 @@ public class DemoRestController {
 	@RequestMapping(value="/module/demo/createcache", method = { RequestMethod.GET })
 	public String createDemo(){
 		System.out.println("**---*");
-		demoService.create();
+		demoService.delete();
 		return "ok";
 	}
 	

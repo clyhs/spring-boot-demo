@@ -22,41 +22,71 @@ import java.lang.reflect.Method;
 public class RedisConfig extends CachingConfigurerSupport {
 
 	@Bean
-	public KeyGenerator baseKeyGenerator() {
+	public KeyGenerator keyGenerator() {
 		return new KeyGenerator() {
 			@Override
-			public Object generate(Object target, Method method,
-					Object... params) {
+			public Object generate(Object o, Method method, Object... objects) {
+				// This will generate a unique key of the class name, the method
+				// name,
+				// and all method parameters appended.
 				StringBuilder sb = new StringBuilder();
-				sb.append(target.getClass().getName());
+				sb.append(o.getClass().getName());
 				sb.append(method.getName());
-				for (Object obj : params) {
+				for (Object obj : objects) {
 					sb.append(obj.toString());
 				}
 				return sb.toString();
 			}
 		};
-
 	}
 
+//	@Bean
+//	public CacheManager cacheManager(
+//			@SuppressWarnings("rawtypes") RedisTemplate redisTemplate) {
+//		return new RedisCacheManager(redisTemplate);
+//	}
+//
+//	@Bean
+//	public RedisTemplate<String, String> redisTemplate(
+//			RedisConnectionFactory factory) {
+//		StringRedisTemplate template = new StringRedisTemplate(factory);
+//		Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(
+//				Object.class);
+//		ObjectMapper om = new ObjectMapper();
+//		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+//		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+//		jackson2JsonRedisSerializer.setObjectMapper(om);
+//		template.setValueSerializer(jackson2JsonRedisSerializer);
+//		template.afterPropertiesSet();
+//		return template;
+//	}
+	
+	//序列化后发现 @cachevict清除无效
+	private void setSerializer(StringRedisTemplate template) {
+	      Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+	      ObjectMapper om = new ObjectMapper();
+	      om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+	      om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+	      jackson2JsonRedisSerializer.setObjectMapper(om);
+	      template.setValueSerializer(jackson2JsonRedisSerializer);
+	  }
+	
 	@Bean
-	public CacheManager cacheManager(
-			@SuppressWarnings("rawtypes") RedisTemplate redisTemplate) {
-		return new RedisCacheManager(redisTemplate);
-	}
+	  public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory cf) {
+		//StringRedisTemplate redisTemplate = new StringRedisTemplate();
+		RedisTemplate<String, String> redisTemplate = new RedisTemplate<String, String>();
+	    redisTemplate.setConnectionFactory(cf);
+	    //setSerializer(redisTemplate);
+	    //redisTemplate.afterPropertiesSet();
+	    return redisTemplate;
+	  }
 
-	@Bean
-	public RedisTemplate<String, String> redisTemplate(
-			RedisConnectionFactory factory) {
-		StringRedisTemplate template = new StringRedisTemplate(factory);
-		Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(
-				Object.class);
-		ObjectMapper om = new ObjectMapper();
-		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-		jackson2JsonRedisSerializer.setObjectMapper(om);
-		template.setValueSerializer(jackson2JsonRedisSerializer);
-		template.afterPropertiesSet();
-		return template;
-	}
+	  @Bean
+	  public CacheManager cacheManager(RedisTemplate redisTemplate) {
+	    RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
+
+	    // Number of seconds before expiration. Defaults to unlimited (0)
+	    cacheManager.setDefaultExpiration(300);
+	    return cacheManager;
+	  }
 }
