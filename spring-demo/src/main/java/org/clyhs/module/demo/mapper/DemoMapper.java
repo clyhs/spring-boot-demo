@@ -9,4 +9,6 @@ public interface DemoMapper {
 	Demo findById(Integer id);
 
 	void insert(String name, int id);
+	
+	void update(Demo demo);
 }

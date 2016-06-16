@@ -15,4 +15,14 @@
 		insert into demo(id, name) values(#{id}, #{name})
 	</insert>
 	
+	<update id="update" parameterType="org.clyhs.module.demo.domain.Demo">
+		update DEMO
+		<set>
+			<if test="name != null">
+				NAME = #{name,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+	
 </mapper>

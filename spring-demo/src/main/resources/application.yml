@@ -29,3 +29,6 @@ spring:
     freemarker:
         cache: false
         request-context-attribute: request
+    redis:
+        host:192.168.1.122
+        port:6379
