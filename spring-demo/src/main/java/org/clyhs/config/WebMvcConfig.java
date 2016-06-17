@@ -38,7 +38,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 @Configuration
-
+@ImportResource("classpath*:dubbo.xml")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 	@Override

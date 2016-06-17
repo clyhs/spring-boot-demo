@@ -10,9 +10,17 @@
 	<dubbo:application name="spring-dubbox-provider" owner="clyhs" organization="dubbox"/>
 
     <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+    <!--  
+    <dubbo:annotation package="org.clyhs.dubbox.api" />-->
 	<!-- dubbo协议 -->
 	<dubbo:protocol name="dubbo" port="20880"/>
 	
 	<dubbo:protocol name="dubbo" serialization="dubbo"/>
+	
+	
+	
+	<dubbo:service interface="org.clyhs.dubbox.api.TestService" ref="testService"  
+        protocol="dubbo" />
+	<bean id="testService" class="org.clyhs.dubbox.api.impl.TestServiceImpl" />
 	
 </beans> 
